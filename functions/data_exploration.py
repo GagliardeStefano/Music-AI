@@ -1,6 +1,14 @@
 import csv
 import shutil
 import os
+import matplotlib.pyplot as plt
+from collections import Counter
+
+
+def get_stream_file(path_file, mode):
+    f = open(path_file, mode)
+    return f
+
 
 def filtered_data_composer_from_maestro(compositore, src_dir, dest_dir, new_csv_file):
     csv_maestro = "maestro-v3.0.0/maestro-v3.0.0.csv"
@@ -53,3 +61,29 @@ def filtered_data_composer_from_maestro(compositore, src_dir, dest_dir, new_csv_
 
 def create_plot_dataset_distribution(compositore):
     csv_file = "dataset/infoMidi.csv"
+
+    f = get_stream_file(csv_file, 'r')
+    csv_reader = csv.reader(f)
+
+    splits = []
+
+    # Leggi i dati e filtra per compositore
+    for row in csv_reader:
+        composer, filename, split, path_file = row
+        if composer == compositore:
+            splits.append(split)
+
+    # Conta la distribuzione degli split
+    split_counts = Counter(splits)
+
+    # Crea il grafico
+    plt.figure(figsize=(8, 6))
+    plt.bar(split_counts.keys(), split_counts.values(), color='skyblue')
+
+    # Aggiungi titolo e etichette
+    plt.title(f"Distribuzione del dataset per {compositore}")
+    plt.xlabel("Split")
+    plt.ylabel("Numero di file")
+
+    # Mostra il grafico
+    plt.show()
