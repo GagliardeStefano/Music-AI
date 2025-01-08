@@ -1,0 +1,55 @@
+import csv
+import shutil
+import os
+
+def filtered_data_composer_from_maestro(compositore, src_dir, dest_dir, new_csv_file):
+    csv_maestro = "maestro-v3.0.0/maestro-v3.0.0.csv"
+
+    # check della cartella di destinazione
+    if not os.path.exists(dest_dir):
+        os.makedirs(dest_dir)
+
+    # file CSV per scrivere i dati filtrati
+    with open(new_csv_file, mode='w', newline='') as new_csv:
+        writer = csv.writer(new_csv)
+
+        # intestazione del nuovo CSV
+        writer.writerow(['composer', 'filename', 'split', 'path_file'])
+
+        # Apri il CSV originale e leggi i dati
+        with open(csv_maestro,encoding='utf-8') as f:
+            reader = csv.reader(f)
+            next(reader)  # Salta l'intestazione
+
+            for row in reader:
+                canonical_composer, canonical_title, split, year, anno_midi_filename, audio_filename, duration = row
+
+                if canonical_composer == compositore:
+
+                    # Prendi il nuovo nome del file, il nuovo path e il nuovo nome compositore
+                    midi_filename = anno_midi_filename.split('/')[-1]
+                    path_file = dest_dir + "/" + midi_filename
+                    composer = canonical_composer.replace('é', 'e')
+
+                    # Scrivi i dati del compositore nel nuovo CSV
+                    writer.writerow(
+                        [composer, midi_filename, split, path_file])
+
+                    # Copia i file MIDI e audio nella cartella di destinazione
+                    midi_src = os.path.join(src_dir, anno_midi_filename)
+
+                    # Crea una sottocartella per lo split, se non esiste
+                    split_dir = os.path.join(dest_dir, split)
+                    if not os.path.exists(split_dir):
+                        os.makedirs(split_dir)
+
+                    # Controlla se i file esistono prima di copiarli
+                    if os.path.exists(midi_src):
+                        shutil.copy(midi_src, split_dir)
+
+    print(
+        f"Dati filtrati per {compositore} sono stati scritti in {new_csv_file} e i file sono stati copiati nella cartella {dest_dir}")
+
+
+def create_plot_dataset_distribution(compositore):
+    csv_file = "dataset/infoMidi.csv"
