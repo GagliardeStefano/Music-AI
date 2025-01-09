@@ -1,4 +1,5 @@
 from functions.data_exploration import filtered_data_composer_from_maestro, create_plot_dataset_distribution
+from functions.data_mining import extract_data_midi, save_notes
 
 
 def filtra_da_maestro(compositore_da_maestro):
@@ -9,7 +10,10 @@ def filtra_da_maestro(compositore_da_maestro):
     new_csv_file = "dataset/infoMidi.csv"
     filtered_data_composer_from_maestro(compositore, src_dir, dest_dir, new_csv_file)
 
-if __name__ == '__main__':
-    #filtra_da_maestro("Frédéric Chopin")
+def estrai_salva_note_accordi(compositore, split):
+    notes = extract_data_midi(compositore, split)
+    save_notes(compositore, split, notes)
 
-    create_plot_dataset_distribution("Frederic Chopin")
+
+if __name__ == '__main__':
+    estrai_salva_note_accordi("Frederic_Chopin", "validation")

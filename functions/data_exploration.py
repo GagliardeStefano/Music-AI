@@ -41,7 +41,7 @@ def filtered_data_composer_from_maestro(compositore, src_dir, dest_dir, new_csv_
 
                     # Scrivi i dati del compositore nel nuovo CSV
                     writer.writerow(
-                        [composer, midi_filename, split, path_file])
+                        [composer, split, midi_filename, path_file])
 
                     # Copia i file MIDI e audio nella cartella di destinazione
                     midi_src = os.path.join(src_dir, anno_midi_filename)
@@ -69,7 +69,7 @@ def create_plot_dataset_distribution(compositore):
 
     # Leggi i dati e filtra per compositore
     for row in csv_reader:
-        composer, filename, split, path_file = row
+        composer, split, filename, path_file = row
         if composer == compositore:
             splits.append(split)
 
