@@ -16,4 +16,5 @@ def estrai_salva_note_accordi(compositore, split):
 
 
 if __name__ == '__main__':
-    estrai_salva_note_accordi("Frederic_Chopin", "validation")
+    #estrai_salva_note_accordi("", "validation")
+    filtered_data_composer_from_maestro("Frédéric Chopin", "maestro-v3.0.0", f"dataset/midi/Frederic_Chopin", "dataset/infoMidi.csv")

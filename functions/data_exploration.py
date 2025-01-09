@@ -9,6 +9,30 @@ def get_stream_file(path_file, mode):
     f = open(path_file, mode)
     return f
 
+def copy_midi_to_dir(src_dir, filename_maestro, dest_dir, split):
+    # Copia i file MIDI e audio nella cartella di destinazione
+    midi_src = os.path.join(src_dir, filename_maestro)
+
+    # Crea una sottocartella per lo split, se non esiste
+    split_dir = os.path.join(dest_dir, split)
+    if not os.path.exists(split_dir):
+        os.makedirs(split_dir)
+
+    # Controlla se i file esistono prima di copiarli
+    if os.path.exists(midi_src):
+        shutil.copy(midi_src, split_dir)
+
+def write_to_new_csv(filename_maestro, dest_dir, canonical_composer, split, writer):
+    # Prendi il nuovo nome del file, il nuovo path e il nuovo nome compositore
+
+    print("print row")
+    midi_filename = filename_maestro.split('/')[-1]
+    path_file = dest_dir + "/" + split + "/" + midi_filename
+    composer = canonical_composer.replace('é', 'e')
+
+    # Scrivi i dati del compositore nel nuovo CSV
+    writer.writerow(
+        [composer, split, midi_filename, path_file])
 
 def filtered_data_composer_from_maestro(compositore, src_dir, dest_dir, new_csv_file):
     csv_maestro = "maestro-v3.0.0/maestro-v3.0.0.csv"
@@ -34,26 +58,12 @@ def filtered_data_composer_from_maestro(compositore, src_dir, dest_dir, new_csv_
 
                 if canonical_composer == compositore:
 
-                    # Prendi il nuovo nome del file, il nuovo path e il nuovo nome compositore
-                    midi_filename = anno_midi_filename.split('/')[-1]
-                    path_file = dest_dir + "/" + midi_filename
-                    composer = canonical_composer.replace('é', 'e')
+                    # Funzione per scrivere il corpo del nuovo file csv
+                    write_to_new_csv(anno_midi_filename, dest_dir, canonical_composer, split, writer)
 
-                    # Scrivi i dati del compositore nel nuovo CSV
-                    writer.writerow(
-                        [composer, split, midi_filename, path_file])
+                    # Funzione per copiare midi in un'altra cartella
+                    copy_midi_to_dir(src_dir, anno_midi_filename, dest_dir, split)
 
-                    # Copia i file MIDI e audio nella cartella di destinazione
-                    midi_src = os.path.join(src_dir, anno_midi_filename)
-
-                    # Crea una sottocartella per lo split, se non esiste
-                    split_dir = os.path.join(dest_dir, split)
-                    if not os.path.exists(split_dir):
-                        os.makedirs(split_dir)
-
-                    # Controlla se i file esistono prima di copiarli
-                    if os.path.exists(midi_src):
-                        shutil.copy(midi_src, split_dir)
 
     print(
         f"Dati filtrati per {compositore} sono stati scritti in {new_csv_file} e i file sono stati copiati nella cartella {dest_dir}")
