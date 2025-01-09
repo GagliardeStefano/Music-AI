@@ -1,6 +1,7 @@
-from functions.data_exploration import filtered_data_composer_from_maestro, create_plot_dataset_distribution, get_notes
+from classes.Modello import Modello
+from functions.data_exploration import filtered_data_composer_from_maestro, get_notes
 from functions.data_mining import extract_data_midi, save_notes
-from functions.data_preprocessing import crea_X_y
+from functions.data_preprocessing import crea_X_y, load_X_y
 
 
 def filtra_da_maestro(compositore_da_maestro):
@@ -16,6 +17,19 @@ def estrai_salva_note_accordi(compositore, split):
     save_notes(compositore, split, notes)
 
 
+
 if __name__ == '__main__':
-    notes = get_notes("Frederic_Chopin", "validation")
-    crea_X_y(notes, "Frederic_Chopin", "validation")
+    compositore = "Frederic_Chopin"
+    split = "train"
+    '''
+    notes = get_notes(compositore, split)
+    crea_X_y(notes, compositore, split)
+    '''
+    modello = Modello("Frederic_Chopin")
+
+    struct_model = modello.crea_struttura()
+    history, model_allenato = modello.allena_modello(struct_model)
+
+    modello.save_model(model_allenato)
+    modello.create_plot_training_history(history)
+

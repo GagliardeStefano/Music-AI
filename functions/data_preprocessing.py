@@ -49,3 +49,11 @@ def save_X_y(X, y, compositore, split):
     print(f"salvati in")
     print(f"{path_dir}/X.npy")
     print(f"{path_dir}/y.npy")
+
+def load_X_y(compositore, split):
+    path_dir = f"finestre_scorrimento/{compositore}/{split}"
+    X = np.load(f"{path_dir}/X.npy")
+    y = np.load(f"{path_dir}/y.npy")
+
+    print(f"caricate finestre {path_dir}/X.npy e {path_dir}/y.npy ")
+    return X, y
