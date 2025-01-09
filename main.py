@@ -1,5 +1,6 @@
-from functions.data_exploration import filtered_data_composer_from_maestro, create_plot_dataset_distribution
+from functions.data_exploration import filtered_data_composer_from_maestro, create_plot_dataset_distribution, get_notes
 from functions.data_mining import extract_data_midi, save_notes
+from functions.data_preprocessing import crea_X_y
 
 
 def filtra_da_maestro(compositore_da_maestro):
@@ -16,5 +17,5 @@ def estrai_salva_note_accordi(compositore, split):
 
 
 if __name__ == '__main__':
-    #estrai_salva_note_accordi("", "validation")
-    filtered_data_composer_from_maestro("Frédéric Chopin", "maestro-v3.0.0", f"dataset/midi/Frederic_Chopin", "dataset/infoMidi.csv")
+    notes = get_notes("Frederic_Chopin", "validation")
+    crea_X_y(notes, "Frederic_Chopin", "validation")

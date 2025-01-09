@@ -1,4 +1,5 @@
 import csv
+import json
 import shutil
 import os
 import matplotlib.pyplot as plt
@@ -97,3 +98,14 @@ def create_plot_dataset_distribution(compositore):
 
     # Mostra il grafico
     plt.show()
+
+def get_notes(compositore, split):
+    path_file = f"dataset/notes/{compositore}/{split}/notes.json"
+    f = get_stream_file(path_file, "r")
+    notes = json.load(f)
+    return notes
+
+def get_pitchnames(notes):
+    pitchnames = sorted(set(item for item in notes))
+
+    return pitchnames
