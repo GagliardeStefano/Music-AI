@@ -106,6 +106,5 @@ def get_notes(compositore, split):
     return notes
 
 def get_pitchnames(notes):
-    pitchnames = sorted(set(item for item in notes))
-
+    pitchnames = sorted(list(set(notes)))
     return pitchnames

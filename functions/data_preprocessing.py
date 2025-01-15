@@ -6,35 +6,22 @@ from functions.data_exploration import get_pitchnames
 
 
 def crea_X_y(notes, compositore, split):
-    sequence_length = 100
+    length = 100
+    features = []
+    targets = []
+    pithnames = get_pitchnames(notes)
+    mapping,_ = build_dictonary(notes)
 
-    # Prende tutti i nomi dei pitch
-    pitchnames = get_pitchnames(notes)
-    n_vocab = len(pitchnames)
+    for i in range(0, len(notes) - length, 1):
+        feature = notes[i:i + length]
+        target = notes[i + length]
+        features.append([mapping[j] for j in feature])
+        targets.append(mapping[target])
 
-    print("dim vocab: ",n_vocab)
-
-    # Crea un dizionario per mappare le altezze delle note in numeri interi
-    note_to_int = dict((note, number) for number, note in enumerate(pitchnames))
-    X = []
-    y = []
-
-    # Crea sequenze
-    print("creazione finestre...")
-    for i in range(0, len(notes) - sequence_length, 1):
-        sequence_in = notes[i:i + sequence_length]
-        sequence_out = notes[i + sequence_length]
-        X.append([note_to_int[char] for char in sequence_in])
-        y.append(note_to_int[sequence_out])
-
-    n_patterns = len(X)
-
-    # Rimodella l'input in un formato compatibile con LSTM
-    X = np.reshape(X, (n_patterns, sequence_length, 1))
-
-    # Normalizzazione
-    X = X / float(n_vocab)
-    y = np_utils.to_categorical(y)
+    # reshape X and normalize
+    X = (np.reshape(features, (len(targets), length, 1))) / float(len(pithnames))
+    # one hot encode the output variable
+    y = np_utils.to_categorical(targets)
 
     save_X_y(X, y, compositore, split)
 
@@ -57,3 +44,11 @@ def load_X_y(compositore, split):
 
     print(f"caricate finestre {path_dir}/X.npy e {path_dir}/y.npy ")
     return X, y
+
+def build_dictonary(notes):
+    pitchnames = get_pitchnames(notes)
+
+    mapping = dict((c, i) for i, c in enumerate(pitchnames))
+    reverse_mapping = dict((i, c) for i, c in enumerate(pitchnames))
+
+    return mapping, reverse_mapping

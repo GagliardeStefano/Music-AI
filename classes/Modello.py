@@ -1,5 +1,6 @@
 import os
 
+from keras.src.optimizers import Adamax
 from matplotlib import pyplot as plt
 import pandas as pd
 
@@ -35,27 +36,20 @@ class Modello:
 
 
     def crea_struttura(self):
+        # Initialising the Model
         model = Sequential()
 
-        # Primo livello
-        model.add(LSTM(units=256, return_sequences=True, input_shape=(self.X.shape[1], self.X.shape[2])))
-        model.add(Dropout(0.2))
+        # Adding layers
+        model.add(LSTM(256, input_shape=(self.X.shape[1], self.X.shape[2]), return_sequences=True))
+        model.add(Dropout(0.1))
 
-        # Secondo livello
-        model.add(LSTM(units=128, return_sequences=True))
-        model.add(Dropout(0.2))
+        model.add(LSTM(128))
+        model.add(Dropout(0.1))
 
-        # Terzo livello
-        model.add(LSTM(units=128))
-        model.add(Dropout(0.2))
-
-        # Livelli dense
         model.add(Dense(128))
-        model.add(Dropout(0.2))
+        model.add(Dropout(0.1))
 
-        # Livelli dense
-        model.add(Dense(self.y.shape[1]))
-        model.add(Activation('softmax'))
+        model.add(Dense(self.y.shape[1], activation='softmax'))
 
         model = self.compile_model(model)
 
@@ -64,7 +58,9 @@ class Modello:
     def compile_model(self, struct_model):
         model = struct_model
 
-        model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
+        # Compiling the model for training
+        opt = Adamax(learning_rate=0.01)
+        model.compile(loss='categorical_crossentropy', optimizer=opt)
 
         return model
 

@@ -2,7 +2,8 @@ from keras.src.saving.saving_lib import load_model
 
 from classes.Modello import Modello
 from functions.data_exploration import filtered_data_composer_from_maestro, get_notes
-from functions.data_generation import generate_notes, create_track
+from functions.data_generation import create_track, save_music_to_midi
+#from functions.data_generation import create_track
 from functions.data_mining import extract_data_midi, save_notes
 from functions.data_preprocessing import crea_X_y, load_X_y
 
@@ -23,19 +24,36 @@ def estrai_salva_note_accordi(compositore, split):
 
 if __name__ == '__main__':
 
-    ''' ALLENARE UN NUOVO MODELLO   
+    '''compositore = "Frederic_Chopin"
+    split = "train"
+    
+    notes = get_notes(compositore, split)
+    crea_X_y(notes, compositore, split)ù
+    
+
+    X,y = load_X_y(compositore, split)
+    print(X.shape)
+    print(y.shape)
+    '''
+    ''' ALLENARE UN NUOVO MODELLO  
     modello = Modello("Frederic_Chopin")
 
-    struct_model = modello.crea_struttura()
-    history, model_allenato = modello.allena_modello(struct_model, 100)
+    struct_model_compiled = modello.crea_struttura()
+    history, model_allenato = modello.allena_modello(struct_model_compiled)
 
     modello.save_model(model_allenato)
-    modello.create_plot_training_history(history)
-    '''
+    modello.plot_training_validation_loss()
+'''
 
-    ''' RIPRENDI ALLENAMENTO    
+
+    ''' RIPRENDI ALLENAMENTO   
     modello = Modello("Frederic_Chopin")
-    modello.riprendi_allenamento(99) # l'epoca (esclusa) da cui riprendere l'allenamento sul numero di epoche massimo
-    '''
+    modello.riprendi_allenamento(69) # l'epoca (esclusa) da cui riprendere l'allenamento sul numero di epoche massimo
 
-
+'''
+    model = load_model("modelli_allenati/Frederic_Chopin/Frederic_Chopin.keras")
+    compositore = "Frederic_Chopin"
+    split = "train"
+    music = create_track(model, compositore, split)
+    print("Music: ", music)
+    save_music_to_midi(music)
