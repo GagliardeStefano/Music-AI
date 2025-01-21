@@ -115,7 +115,8 @@ print("Tutti i risultati", all_results)
 - `generated_folder` e `test_folder` sono rispettivamente le cartelle
 che contengono i file generati dal modello e i file di test del compositore
 - `compare_with_all_tests()` permette di ottenere i valori necessari
-per valutare l'accuratezza del tuo modello
+per valutare l'accuratezza del tuo modello -> 
+[functions/data_accuracy.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_accuracy.py)
 
 # Riferimenti
 Dataset MAESTRO:
