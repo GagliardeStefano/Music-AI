@@ -40,14 +40,14 @@ class Modello:
         model = Sequential()
 
         # Adding layers
-        model.add(LSTM(256, input_shape=(self.X.shape[1], self.X.shape[2]), return_sequences=True))
-        model.add(Dropout(0.1))
+        model.add(LSTM(512, input_shape=(self.X.shape[1], self.X.shape[2]), return_sequences=True))
+        model.add(Dropout(0.2))
 
-        model.add(LSTM(128))
-        model.add(Dropout(0.1))
+        model.add(LSTM(256))
+        model.add(Dropout(0.2))
 
-        model.add(Dense(128))
-        model.add(Dropout(0.1))
+        model.add(Dense(256))
+        model.add(Dropout(0.2))
 
         model.add(Dense(self.y.shape[1], activation='softmax'))
 
@@ -76,18 +76,11 @@ class Modello:
 
         checkpoint = ModelCheckpoint(
             file_path_checkpoint,
-            monitor='val_loss',  # Monitora la perdita sul set di allenamento
+            monitor='loss',  # Monitora la perdita sul set di allenamento
             verbose=1,  # Stampa mex
             save_best_only=True,  # Salva solo se migliora
             save_weights_only=True,  # Salva solo i pesi
             mode='min'  # Obiettivo minimizzare
-        )
-
-        # per fermarci nel caso di solo peggioramenti
-        early_stopping = EarlyStopping(
-            monitor='val_loss',  # Monitora la perdita sul set di validazione
-            patience=10,  # Numero massimo di epochs senza miglioramenti
-            restore_best_weights=True  # Ripristina i pesi del modello migliori
         )
 
         save_history_callback = LambdaCallback(
@@ -96,9 +89,9 @@ class Modello:
                 header=not os.path.exists(f'modelli_allenati/{self.compositore}/history.csv'), index=False)
         )
 
-        history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=100, batch_size=128,
+        history = model.fit(X_train, y_train, validation_data=(X_val, y_val), epochs=100, batch_size=256,
                             initial_epoch=initial_epoch,
-                            callbacks=[early_stopping, checkpoint, save_history_callback])
+                            callbacks=[checkpoint, save_history_callback])
 
         return history, model
 
@@ -120,7 +113,7 @@ class Modello:
 
         # Estrarre i dati
         loss = history_df['loss']
-        val_loss = history_df.get('val_loss', None)  # Se la colonna val_loss non esiste, None
+        #val_loss = history_df.get('val_loss', None)  # Se la colonna val_loss non esiste, None
 
         # Ottenere il numero di epoche
         epochs = history_df['epoch'] if 'epoch' in history_df.columns else range(1, len(loss) + 1)
@@ -129,10 +122,10 @@ class Modello:
         plt.figure(figsize=(10, 6))
         plt.plot(epochs, loss, label='Training Loss', color='blue')
 
-        if val_loss is not None:
-            plt.plot(epochs, val_loss, label='Validation Loss', color='orange')
+        #if val_loss is not None:
+        #    plt.plot(epochs, val_loss, label='Validation Loss', color='orange')
 
-        plt.title(f'Training and Validation Loss - {self.compositore}', fontsize=20)
+        plt.title(f'Training Loss - {self.compositore}', fontsize=20)
         plt.xlabel('Epochs', fontsize=14)
         plt.ylabel('Loss', fontsize=14)
         plt.legend(fontsize=14)
@@ -157,7 +150,6 @@ class Modello:
             print("Caricata la history precedente")
         except:
             print("File history non trovato o non esiste una history precedente")
-
 
         model_compiled = self.compile_model(model)
         print("Modello compilato")
