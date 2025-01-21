@@ -1,6 +1,6 @@
 # Music-AI
 Music-AI è un generatore di musica classica sullo stile di Frédéric Chopin. 
-Utilizzando il machine learning, il modello è in grado di apprendere dalle opere di Chopin e generare nuove tracce musicali nello stesso stile.
+Utilizzando il machine learning, il modello è in grado di apprendere dalle opere di Chopin e generare nuove tracce musicali nello stesso stile con un'accuratezza del 46.31%.
 
 I file MIDI utilizzati per l'addestramento provengono dal dataset [MAESTRO](https://magenta.tensorflow.org/datasets/maestro) V3.0.0, reso pubblico da Magenta.
 
@@ -19,10 +19,10 @@ con le seguenti informazioni:
 
 | Colonna              | Descrizione                                                                                       |
 |----------------------|---------------------------------------------------------------------------------------------------|
-| `canonical_composer` | Il nome del compositore a cui appartiene il brano MIDI.                                           |
+| `composer`           | Il nome del compositore a cui appartiene il brano MIDI.                                           |
 | `split`              | Indica se il file MIDI appartiene alla sezione di "train" (addestramento) o di "test" (verifica). |
-| `midi_filename`      | Il nome del file MIDI.                                                                            |
-| `path_file_midi`     | Il percorso completo al file MIDI nel sistema.                                                    |
+| `filename`           | Il nome del file MIDI.                                                                            |
+| `path_file`          | Il percorso completo al file MIDI nel sistema.                                                    |
 
 Nel package [functions](https://github.com/GagliardeStefano/Music-AI/tree/master/functions) 
 si trovano le funzioni utili per lavorare con i dati e gestire il modello.
@@ -44,8 +44,8 @@ Librerire principali:
 - `pandas 2.2.3`: utilizzato per il modello LSTM
 - `scikit-learn 1.6.0`: utilizzato per effettuare lo split delle finestre
 di scorrimento in "train" e "validation"
-- `music21 9.3.0`: utilizzato per analizzare e estrarre informazioni dai file MIDI
-- `keras 3.7.0` + `tensorflow 2.18.0`: usati per costruire il modello LSTM
+- `music21 9.3.0`: utilizzato per analizzare ed estrarre informazioni dai file MIDI
+- `keras 3.8.0` + `tensorflow 2.18.0`: usati per costruire il modello LSTM
 
 ## Come replicare
 ### 1. Requisiti
@@ -56,16 +56,16 @@ pip install -r requirements.txt
 ### 2. Estrai eventi musicali
 Una volta presi tutti i file MIDI suddivisi per "train" e "test"
 , estrai tutti gli eventi musicali (note e accordi) da ogni file di "train" utilizzando
-la funzione `extract_data_midi(compositore, split)` e salvare il risultato in un documento JSON con `save_notes(compositore, split, notes)`.
+la funzione `extract_data_midi(compositore, split)` e salva il risultato in un documento JSON con `save_notes(compositore, split, notes)`.
 Entrambe le funzioni sono all'interno di [functions/data_mining.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_mining.py)
-### 3. Creazione delle finestre
+### 3. Crea le finestre di scorrimento
 Una volta creato il documento JSON con tutti gli eventi, esegui la funzione `crea_X_y(notes, compositore, split)`,
 presente in [functions/data_preprocessing.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_preprocessing.py),
 per creare le 
-finestre di scorrimento adatte per allenare l'LSTM.
+finestre di scorrimento adatte per allenare un modello LSTM.
 ### 4. Crea e allena il modello
-Create le finestre X e y, usa la classe Modello presente nel file [classes/Modello.py](https://github.com/GagliardeStefano/Music-AI/blob/master/classes/Modello.py)
-Crea il costruttore, crea la sua struttura, compila il modello, allenalo e poi salvalo.
+Create le finestre X e y, usa la classe Modello presente nel file [classes/Modello.py](https://github.com/GagliardeStefano/Music-AI/blob/master/classes/Modello.py).
+Chiama il costruttore, crea la struttura del modello, compila il modello, allenalo e poi salvalo.
 Un esempio è il seguente:
 ```
 modello = Modello("Frederic_Chopin")
@@ -101,7 +101,7 @@ dato il modello -> [functions/data_generation.py](https://github.com/GagliardeSt
 -> [functions/data_generation.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_generation.py)
 
 ### 6. Valuta il modello
-Una volta create un numero considerevolce di tracce puoi valutare
+Una volta create un numero considerevole di tracce puoi valutare
 le performance del tuo modello. Usando questo codice:
 ```
 generated_folder = f"tracce_generate/{compositore}"
