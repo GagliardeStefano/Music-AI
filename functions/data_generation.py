@@ -1,9 +1,9 @@
 import os
 
 import numpy as np
-from music21 import note, instrument, chord, stream
+from music21 import note, chord, stream
 
-from functions.data_preprocessing import load_X_y, build_dictonary
+from functions.data_preprocessing import build_dictonary
 from functions.data_exploration import get_pitchnames, get_notes
 
 def chord_n_notes(notes):

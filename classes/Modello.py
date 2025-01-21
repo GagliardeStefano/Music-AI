@@ -4,15 +4,14 @@ from keras.src.optimizers import Adamax
 from matplotlib import pyplot as plt
 import pandas as pd
 
-from functions.data_exploration import get_pitchnames, get_notes
 from functions.data_preprocessing import load_X_y
 
 from sklearn.model_selection import train_test_split
 
 import tensorflow
-from keras.src.layers import LSTM, Dropout, Dense, Activation
+from keras.src.layers import LSTM, Dropout, Dense
 from keras.src.models import Sequential
-from keras.src.callbacks import ModelCheckpoint, EarlyStopping, LambdaCallback
+from keras.src.callbacks import ModelCheckpoint, LambdaCallback
 
 
 def print_info_GPU():

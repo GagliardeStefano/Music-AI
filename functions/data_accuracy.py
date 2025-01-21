@@ -1,10 +1,7 @@
 import os
 
-import numpy as np
 from music21 import converter, note, chord
 from Levenshtein import distance as levenshtein_distance
-from fastdtw import fastdtw
-from scipy.spatial.distance import euclidean
 from collections import Counter
 
 def extract_notes(file):

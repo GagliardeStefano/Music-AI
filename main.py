@@ -1,4 +1,3 @@
-import os
 from keras.src.saving.saving_lib import load_model
 from classes.Modello import Modello
 from functions.data_accuracy import compare_with_all_tests
