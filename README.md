@@ -104,11 +104,11 @@ dato il modello -> [functions/data_generation.py](https://github.com/GagliardeSt
 Una volta create un numero considerevole di tracce puoi valutare
 le performance del tuo modello. Usando questo codice:
 ```
-generated_folder = f"tracce_generate/{compositore}"
-test_folder = f"dataset/midi/{compositore}/test"
+generated_folder = f"tracce_generate/Frederic_Chopin"
+test_folder = f"dataset/midi/Frederic_Chopin/test"
 
 avg_results, accuracy_percentage, all_results = compare_with_all_tests(generated_folder, test_folder)
-print("Resultato medio", avg_results)
+print("Risultato medio", avg_results)
 print("Accuracy Modello", accuracy_percentage)
 print("Tutti i risultati", all_results)
 ```
