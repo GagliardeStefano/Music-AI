@@ -87,6 +87,10 @@ if __name__ == '__main__':
     '''GENERAZIONE TRACCIA'''
     #genera_traccia("Frederic_Chopin")
 
+    '''CALCOLO ACCURATEZZA'''
+    # calcola_accuracy_valori("Frederic_Chopin")
+
+
     while True:
         print("\n\n0-> esci\n1-> genera una traccia\n2-> ascolta una traccia\n")
 
@@ -103,6 +107,3 @@ if __name__ == '__main__':
                 avvia_traccia(numero)
             case _:
                 exit(0)
-
-    '''CALCOLO ACCURATEZZA'''
-    #calcola_accuracy_valori("Frederic_Chopin")
