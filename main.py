@@ -1,3 +1,5 @@
+import os
+
 from keras.src.saving.saving_lib import load_model
 from classes.Modello import Modello
 from functions.data_accuracy import compare_with_all_tests
@@ -5,6 +7,8 @@ from functions.data_exploration import filtered_data_composer_from_maestro, get_
 from functions.data_generation import create_track, save_track
 from functions.data_mining import extract_data_midi, save_notes
 from functions.data_preprocessing import crea_X_y, load_X_y
+
+import pygame
 
 
 def filtra_da_maestro(compositore_da_maestro):
@@ -62,9 +66,43 @@ def calcola_accuracy_valori(compositore):
     print("Accuracy Modello", accuracy_percentage)
     print("Tutti i risultati", all_results)
 
+def avvia_traccia(numero):
+    dir_traccia = f"tracce_generate/Frederic_Chopin"
+    traccia = f"output_melody_{numero}.mid"
+    traccia_scelta = dir_traccia + "/" + traccia
+
+    print(f"Riproducendo la traccia {traccia}...")
+
+    # Inizializza pygame mixer e carica il file MIDI
+    pygame.mixer.init()
+    pygame.mixer.music.load(traccia_scelta)
+    pygame.mixer.music.play()
+
+    # Aspetta che la traccia finisca
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10)  # Fai un "tick" per far funzionare correttamente il mixer
+
+
 if __name__ == '__main__':
     '''GENERAZIONE TRACCIA'''
-    genera_traccia("Frederic_Chopin")
+    #genera_traccia("Frederic_Chopin")
+
+    while True:
+        print("\n\n0-> esci\n1-> genera una traccia\n2-> ascolta una traccia\n")
+
+        scelta = input("scegli un opzione:")
+
+        match scelta:
+            case "0":
+                exit(0)
+            case "1":
+                genera_traccia("Frederic_Chopin")
+            case "2":
+                dir = "tracce_generate/Frederic_Chopin"
+                numero = int(input(f"Scegli un numero tra 1 e {len(os.listdir(dir))}: "))
+                avvia_traccia(numero)
+            case _:
+                exit(0)
 
     '''CALCOLO ACCURATEZZA'''
     #calcola_accuracy_valori("Frederic_Chopin")
