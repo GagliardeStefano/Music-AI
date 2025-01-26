@@ -1,20 +1,20 @@
-# Music-AI
-Music-AI è un generatore di musica classica sullo stile di Frédéric Chopin. 
+# PreluDeep
+PreluDeep è un generatore di musica classica sullo stile di Frédéric Chopin. 
 Utilizzando il machine learning, il modello è in grado di apprendere dalle opere di Chopin e generare nuove tracce musicali nello stesso stile con un'accuratezza del 46.31%.
 
 I file MIDI utilizzati per l'addestramento provengono dal dataset [MAESTRO](https://magenta.tensorflow.org/datasets/maestro) V3.0.0, reso pubblico da Magenta.
 
-Music-AI si basa su un modello LSTM (Long Short-Term Memory), un tipo di rete neurale ricorrente (RNN), per generare la musica.
+PreluDeep si basa su un modello LSTM (Long Short-Term Memory), un tipo di rete neurale ricorrente (RNN), per generare la musica.
 ## Contenuto
-Nella cartella [dataset](https://github.com/GagliardeStefano/Music-AI/blob/master/dataset) 
+Nella cartella [dataset](https://github.com/GagliardeStefano/PreluDeep/blob/master/dataset) 
 sono presenti tutti i file necessari per l'addestramento del modello:
-- [midi/Frederic_Chopin](https://github.com/GagliardeStefano/Music-AI/tree/master/dataset/midi/Frederic_Chopin)
+- [midi/Frederic_Chopin](https://github.com/GagliardeStefano/PreluDeep/tree/master/dataset/midi/Frederic_Chopin)
 contiene i file MIDI suddivisi per "test" e "train".
-- [notes/Frederic_Chopin/train](https://github.com/GagliardeStefano/Music-AI/tree/master/dataset/notes/Frederic_Chopin/train)
+- [notes/Frederic_Chopin/train](https://github.com/GagliardeStefano/PreluDeep/tree/master/dataset/notes/Frederic_Chopin/train)
 contiene un documento JSON con note e accordi estratti dai file MIDI di "train".
-- [plots](https://github.com/GagliardeStefano/Music-AI/tree/master/dataset/plots)
+- [plots](https://github.com/GagliardeStefano/PreluDeep/tree/master/dataset/plots)
 contiene un immagine PNG che mostra la distribuzione iniziale dei file MIDI
-- [infoMidi.csv](https://github.com/GagliardeStefano/Music-AI/blob/master/dataset/infoMidi.csv)
+- [infoMidi.csv](https://github.com/GagliardeStefano/PreluDeep/blob/master/dataset/infoMidi.csv)
 con le seguenti informazioni:
 
 | Colonna              | Descrizione                                                                                       |
@@ -24,18 +24,18 @@ con le seguenti informazioni:
 | `filename`           | Il nome del file MIDI.                                                                            |
 | `path_file`          | Il percorso completo al file MIDI nel sistema.                                                    |
 
-Nel package [functions](https://github.com/GagliardeStefano/Music-AI/tree/master/functions) 
+Nel package [functions](https://github.com/GagliardeStefano/PreluDeep/tree/master/functions) 
 si trovano le funzioni utili per lavorare con i dati e gestire il modello.
 
-Nella cartella [modelli_allenati/Frederic_Chopin](https://github.com/GagliardeStefano/Music-AI/tree/master/modelli_allenati/Frederic_Chopin)
+Nella cartella [modelli_allenati/Frederic_Chopin](https://github.com/GagliardeStefano/PreluDeep/tree/master/modelli_allenati/Frederic_Chopin)
 è presente il modello LSTM addestrato (_file_.keras), i checkpoint dei pesi
 migliori (_file_.weights.h5) e un file _history.csv_ contenente i valori
 di _loss_ e _val_loss_ per epoca.
 
-Nella cartella [classes](https://github.com/GagliardeStefano/Music-AI/tree/master/classes)
+Nella cartella [classes](https://github.com/GagliardeStefano/PreluDeep/tree/master/classes)
 è presente il file _Modello.py_, usato per creare, addestrare e salvare il modello LSTM.
 
-Nella cartella [tracce_generate/Frederic_Chopin](https://github.com/GagliardeStefano/Music-AI/tree/master/tracce_generate/Frederic_Chopin)
+Nella cartella [tracce_generate/Frederic_Chopin](https://github.com/GagliardeStefano/PreluDeep/tree/master/tracce_generate/Frederic_Chopin)
 sono presenti tutti i file MIDI generati dal modello LSTM.
 ## Costruito con
 - python 3.12
@@ -57,14 +57,14 @@ pip install -r requirements.txt
 Una volta presi tutti i file MIDI suddivisi per "train" e "test"
 , estrai tutti gli eventi musicali (note e accordi) da ogni file di "train" utilizzando
 la funzione `extract_data_midi(compositore, split)` e salva il risultato in un documento JSON con `save_notes(compositore, split, notes)`.
-Entrambe le funzioni sono all'interno di [functions/data_mining.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_mining.py)
+Entrambe le funzioni sono all'interno di [functions/data_mining.py](https://github.com/GagliardeStefano/PreluDeep/blob/master/functions/data_mining.py)
 ### 3. Crea le finestre di scorrimento
 Una volta creato il documento JSON con tutti gli eventi, esegui la funzione `crea_X_y(notes, compositore, split)`,
-presente in [functions/data_preprocessing.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_preprocessing.py),
+presente in [functions/data_preprocessing.py](https://github.com/GagliardeStefano/PreluDeep/blob/master/functions/data_preprocessing.py),
 per creare le 
 finestre di scorrimento adatte per allenare un modello LSTM.
 ### 4. Crea e allena il modello
-Create le finestre X e y, usa la classe Modello presente nel file [classes/Modello.py](https://github.com/GagliardeStefano/Music-AI/blob/master/classes/Modello.py).
+Create le finestre X e y, usa la classe Modello presente nel file [classes/Modello.py](https://github.com/GagliardeStefano/PreluDeep/blob/master/classes/Modello.py).
 Chiama il costruttore, crea la struttura del modello, compila il modello, allenalo e poi salvalo.
 Un esempio è il seguente:
 ```
@@ -94,11 +94,11 @@ save_track(compositore, melody_midi)
 ```
 - `load_model()` permette di caricare il modello allenato.
 - `load_X_y()` permette di caricare le finestre di scorrimento
-precedentemente create -> [functions/data_preprocessing.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_preprocessing.py)
+precedentemente create -> [functions/data_preprocessing.py](https://github.com/GagliardeStefano/PreluDeep/blob/master/functions/data_preprocessing.py)
 - `create_track()` permette di generera una traccia musicale
-dato il modello -> [functions/data_generation.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_generation.py)
+dato il modello -> [functions/data_generation.py](https://github.com/GagliardeStefano/PreluDeep/blob/master/functions/data_generation.py)
 - `save_track()` permette di salvare la traccia musicale in formato .mid
--> [functions/data_generation.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_generation.py)
+-> [functions/data_generation.py](https://github.com/GagliardeStefano/PreluDeep/blob/master/functions/data_generation.py)
 
 ### 6. Valuta il modello
 Una volta create un numero considerevole di tracce puoi valutare
@@ -116,7 +116,7 @@ print("Tutti i risultati", all_results)
 che contengono i file generati dal modello e i file di test del compositore
 - `compare_with_all_tests()` permette di ottenere i valori necessari
 per valutare l'accuratezza del tuo modello -> 
-[functions/data_accuracy.py](https://github.com/GagliardeStefano/Music-AI/blob/master/functions/data_accuracy.py)
+[functions/data_accuracy.py](https://github.com/GagliardeStefano/PreluDeep/blob/master/functions/data_accuracy.py)
 
 # Riferimenti
 Dataset MAESTRO:
