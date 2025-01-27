@@ -78,9 +78,12 @@ def avvia_traccia(numero):
     pygame.mixer.music.load(traccia_scelta)
     pygame.mixer.music.play()
 
-    # Aspetta che la traccia finisca
     while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(10)  # Fai un "tick" per far funzionare correttamente il mixer
+        comando = input("'s' per fermare la riproduzione: ").strip().lower()
+        if comando == 's':
+            pygame.mixer.music.stop()
+            print("Traccia fermata.")
+            break
 
 
 if __name__ == '__main__':
@@ -94,7 +97,7 @@ if __name__ == '__main__':
     while True:
         print("\n\n0-> esci\n1-> genera una traccia\n2-> ascolta una traccia\n")
 
-        scelta = input("scegli un opzione:")
+        scelta = input("scegli un'opzione:")
 
         match scelta:
             case "0":
@@ -105,5 +108,6 @@ if __name__ == '__main__':
                 dir = "tracce_generate/Frederic_Chopin"
                 numero = int(input(f"Scegli un numero tra 1 e {len(os.listdir(dir))}: "))
                 avvia_traccia(numero)
+
             case _:
                 exit(0)
